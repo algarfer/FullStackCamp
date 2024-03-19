@@ -3,8 +3,16 @@ const Header = (props) => {
     return <h1>{ props.title }</h1>
 }
 
-const Content = (props) => {
+const Part = (props) => {
     return <p>{ props.part } { props.exercise }</p>
+}
+
+const Content = (props) => {
+    return (
+        <div>
+            { props.data.map((item, index) => <Part key={ index } part={ item.part } exercise={ item.exercise } />) }
+        </div>
+    )
 }
 
 const Total = (props) => {
@@ -23,9 +31,11 @@ const App = () => {
     return (
         <div>
             <Header title={ course } />
-            <Content part={ part1 } exercise={ exercises1 } />
-            <Content part={ part2 } exercise={ exercises2 } />
-            <Content part={ part3 } exercise={ exercises3 } />
+            <Content data = {[
+                { part: part1, exercise: exercises1 },
+                { part: part2, exercise: exercises2 },
+                { part: part3, exercise: exercises3 }
+            ]} />
             <Total value={ exercises1 + exercises2 + exercises3 } />
         </div>
     )
