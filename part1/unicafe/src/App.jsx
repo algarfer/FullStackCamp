@@ -24,19 +24,21 @@ const Statistics = ({good, neutral, bad}) => {
     return (
         <section>
             <h2>Statistics</h2>
-            <ul>
-                <StatisticLine text="Good" value={good} />
-                <StatisticLine text="Neutral" value={neutral} />
-                <StatisticLine text="Bad" value={bad} />
-                <StatisticLine text="All" value={good + neutral + bad} />
-                <StatisticLine text="Average" value={average(good, neutral, bad)} />
-                <StatisticLine text="Positive" value={positive(good, neutral, bad) + " %"} />
-            </ul>
+            <table>
+                <tbody>
+                    <StatisticLine text="Good" value={good} />
+                    <StatisticLine text="Neutral" value={neutral} />
+                    <StatisticLine text="Bad" value={bad} />
+                    <StatisticLine text="All" value={good + neutral + bad} />
+                    <StatisticLine text="Average" value={average(good, neutral, bad)} />
+                    <StatisticLine text="Positive" value={positive(good, neutral, bad) + " %"} />
+                </tbody>
+            </table>
         </section>
     )
 }
 
-const StatisticLine = ({text, value}) => <li>{text}: {value}</li>
+const StatisticLine = ({text, value}) => <tr><td>{text}</td><td>{value}</td></tr>
 const Button = ({text, onClick}) => <button onClick={onClick}>{text}</button>
 
 const increaseValue = (value, f) => f(value + 1)
