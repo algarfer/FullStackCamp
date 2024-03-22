@@ -1,20 +1,20 @@
-import { useState } from 'react'
+import {useState} from 'react'
 
 const GiveFeedback = ({good, neutral, bad}) => {
     return (
         <section>
             <h2>Give feedback</h2>
             <div style={{display: "flex", gap: "1rem"}}>
-                <button onClick={good}>good</button>
-                <button onClick={neutral}>neutral</button>
-                <button onClick={bad}>bad</button>
+                <Button text="Good" onClick={good} />
+                <Button text="Neutral" onClick={neutral} />
+                <Button text="Bad" onClick={bad} />
             </div>
         </section>
     )
 }
 
 const Statistics = ({good, neutral, bad}) => {
-    if(good + neutral + bad === 0)
+    if (good + neutral + bad === 0)
         return (
             <section>
                 <h2>Statistics</h2>
@@ -25,16 +25,19 @@ const Statistics = ({good, neutral, bad}) => {
         <section>
             <h2>Statistics</h2>
             <ul>
-                <li>Good: {good}</li>
-                <li>Neutral: {neutral}</li>
-                <li>Bad: {bad}</li>
-                <li>All: {good + neutral + bad}</li>
-                <li>Average: {average(good, neutral, bad)}</li>
-                <li>Positive: {positive(good, neutral, bad)} %</li>
+                <StatisticLine text="Good" value={good} />
+                <StatisticLine text="Neutral" value={neutral} />
+                <StatisticLine text="Bad" value={bad} />
+                <StatisticLine text="All" value={good + neutral + bad} />
+                <StatisticLine text="Average" value={average(good, neutral, bad)} />
+                <StatisticLine text="Positive" value={positive(good, neutral, bad) + " %"} />
             </ul>
         </section>
     )
 }
+
+const StatisticLine = ({text, value}) => <li>{text}: {value}</li>
+const Button = ({text, onClick}) => <button onClick={onClick}>{text}</button>
 
 const increaseValue = (value, f) => f(value + 1)
 const average = (good, neutral, bad) => (good + neutral + bad) === 0 ? 0 : (good - bad) / (good + neutral + bad)
@@ -55,7 +58,7 @@ const App = () => {
             />
             <Statistics good={good} neutral={neutral} bad={bad} />
         </div>
-  )
+    )
 }
 
 export default App
