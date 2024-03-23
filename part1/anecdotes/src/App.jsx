@@ -23,12 +23,22 @@ const App = () => {
     const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
     return (
-        <div style={{display: "flex", flexFlow:"column", gap:"1rem"}}>
-            <p>{anecdotes[selected]}</p>
-            <p>has {votes[selected]} votes</p>
-            <button style={{width: "fit-content"}} onClick={() => setVotes(upVote(votes, selected))}>vote</button>
-            <button style={{width: "fit-content"}} onClick={() => setSelected(randomNum(anecdotes.length))}>next anecdote</button>
-        </div>
+        <>
+            <div>
+                <h2>Anecdote of the day</h2>
+                <p>{anecdotes[selected]}</p>
+                <p>has {votes[selected]} votes</p>
+                <div>
+                    <button style={{width: "fit-content"}} onClick={() => setVotes(upVote(votes, selected))}>vote</button>
+                    <button style={{width: "fit-content"}} onClick={() => setSelected(randomNum(anecdotes.length))}>next anecdote</button>
+                </div>
+            </div>
+            <div>
+                <h2>Anecdote with most votes</h2>
+                <p>{anecdotes[votes.indexOf(Math.max(...votes))]}</p>
+                <p>has {votes[votes.indexOf(Math.max(...votes))]} votes</p>
+            </div>
+        </>
     )
 }
 
