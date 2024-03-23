@@ -1,6 +1,11 @@
 import { useState } from 'react'
 
 const randomNum = (max) => Math.random() * max | 0
+const upVote = (arr, index) => {
+    const copy = [...arr]
+    copy[index]++
+    return copy
+}
 
 const App = () => {
     const anecdotes = [
@@ -15,10 +20,13 @@ const App = () => {
     ]
 
     const [selected, setSelected] = useState(randomNum(anecdotes.length))
+    const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
     return (
-        <div style={{display: "flex", flexFlow:"column"}}>
-            {anecdotes[selected]}
+        <div style={{display: "flex", flexFlow:"column", gap:"1rem"}}>
+            <p>{anecdotes[selected]}</p>
+            <p>has {votes[selected]} votes</p>
+            <button style={{width: "fit-content"}} onClick={() => setVotes(upVote(votes, selected))}>vote</button>
             <button style={{width: "fit-content"}} onClick={() => setSelected(randomNum(anecdotes.length))}>next anecdote</button>
         </div>
     )
