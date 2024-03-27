@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from "./components/Filter.jsx";
+import PersonForm from "./components/PersonForm.jsx";
+import Persons from "./components/Persons.jsx";
 
 const App = () => {
     const [persons, setPersons] = useState([
@@ -11,17 +14,9 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('')
     const [filter, setFilter] = useState('')
 
-    const handleInputName = (e) => {
-        setNewName(e.target.value)
-    }
-
-    const handleInputNumber = (e) => {
-        setNewNumber(e.target.value)
-    }
-
-    const handleFilter = (e) => {
-        setFilter(e.target.value)
-    }
+    const handleInputName = (e) => setNewName(e.target.value)
+    const handleInputNumber = (e) => setNewNumber(e.target.value)
+    const handleFilter = (e) => setFilter(e.target.value)
 
     const handleForm = (e) => {
         e.preventDefault()
@@ -32,32 +27,23 @@ const App = () => {
         setPersons(persons.concat({ name: newName, number: newNumber, id: persons.length + 1}))
         setNewName('')
         setNewNumber('')
+        setFilter('')
     }
 
     return (
         <div>
             <h1>Phonebook</h1>
-            <div>
-                filter shown with <input onChange={handleFilter}/>
-            </div>
+            <Filter handler={handleFilter} filter={filter} />
             <h2>Add a new</h2>
-            <form onSubmit={handleForm} style={{display: "flex", flexFlow: "column", gap: "1rem"}}>
-                <div>
-                    name: <input onChange={handleInputName} value={newName} />
-                </div>
-                <div>
-                    number: <input onChange={handleInputNumber} value={newNumber} />
-                </div>
-                <div>
-                    <button type="submit">add</button>
-                </div>
-            </form>
+            <PersonForm
+                formHandler={handleForm}
+                nameHandler={handleInputName}
+                name={newName}
+                numberHandler={handleInputNumber}
+                number={newNumber}
+            />
             <h2>Numbers</h2>
-            {
-                persons
-                    .filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
-                    .map(person => <p key={person.id}>{person.name}: {person.number}</p>)
-            }
+            <Persons persons={persons} filter={filter} />
         </div>
     )
 }
