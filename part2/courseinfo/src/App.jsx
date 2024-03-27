@@ -1,4 +1,4 @@
-import Course from "./Course.jsx";
+import Course from "./components/Course.jsx";
 
 const App = () => {
     const courses = [
