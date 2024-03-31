@@ -24,23 +24,30 @@ const App = () => {
 
   const handleForm = (e) => {
     e.preventDefault()
-    if (persons.find(({name}) => name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
-    const person = {
-      name: newName,
-      number: newNumber,
-      id: persons.length + 1
-    }
 
-    contacts
-      .create(person)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
-        setFilter('')
+    contacts.getByName(newName)
+      .then(p => {
+        if (p.length > 0) {
+          if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+            contacts
+              .update(p[0].id, {...p[0], number: newNumber})
+              .then(returnedPerson => {
+                setPersons(persons.map(person => person.id !== p[0].id ? person : returnedPerson))
+                setNewName('')
+                setNewNumber('')
+                setFilter('')
+              })
+          }
+        } else {
+          contacts
+            .create({ name: newName, number: newNumber, id: persons.length + 1 })
+            .then(returnedPerson => {
+              setPersons(persons.concat(returnedPerson))
+              setNewName('')
+              setNewNumber('')
+              setFilter('')
+            })
+        }
       })
   }
 
