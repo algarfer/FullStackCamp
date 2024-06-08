@@ -11,7 +11,7 @@ const App = () => {
       .then(response => setData(response.data))
   }, []);
 
-  return <Search data={data || []}/>
+  return <Search data={data || []} />
 }
 
 export default App

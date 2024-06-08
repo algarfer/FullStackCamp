@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState} from "react";
 import Display from "./Display";
 
 const Search = ({data}) => {
@@ -6,7 +6,7 @@ const Search = ({data}) => {
   const [display, setDisplay] = useState(null);
 
   const searchList = () => {
-    const current =  data
+    const current = data
       .filter(d => d
         .name
         .common
@@ -33,9 +33,9 @@ const Search = ({data}) => {
     <div>
       <div style={{display: "flex", alignItems: "center", gap: "1rem"}}>
         <p>find countries</p>
-        <input onChange={e => setSearch(e.target.value)}/>
+        <input onChange={e => setSearch(e.target.value)} />
       </div>
-      { searchList() }
+      {searchList()}
     </div>
   )
 }
