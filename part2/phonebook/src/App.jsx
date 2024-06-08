@@ -3,12 +3,15 @@ import Filter from "./components/Filter.jsx";
 import PersonForm from "./components/PersonForm.jsx";
 import Persons from "./components/Persons.jsx";
 import contacts from "./services/contacts";
+import Notification from "./components/Notification.jsx";
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState(null)
+  const [correct, setCorrect] = useState(true)
 
   const handleInputName = (e) => setNewName(e.target.value)
   const handleInputNumber = (e) => setNewNumber(e.target.value)
@@ -21,6 +24,12 @@ const App = () => {
         setPersons(p)
       })
   }, []);
+
+  const changeMessage = (message, correct) => {
+    setMessage(message)
+    setCorrect(correct)
+    setTimeout(() => setMessage(null), 2000)
+  }
 
   const handleForm = (e) => {
     e.preventDefault()
@@ -36,6 +45,7 @@ const App = () => {
                 setNewName('')
                 setNewNumber('')
                 setFilter('')
+                changeMessage(`Updated ${returnedPerson.name}`, true)
               })
           }
         } else {
@@ -46,6 +56,7 @@ const App = () => {
               setNewName('')
               setNewNumber('')
               setFilter('')
+              changeMessage(`Added ${returnedPerson.name}`, true)
             })
         }
       })
@@ -54,6 +65,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      {message && <Notification message={message} correct={correct}></Notification>}
       <Filter handler={handleFilter} filter={filter} />
       <h2>Add a new</h2>
       <PersonForm
@@ -64,7 +76,7 @@ const App = () => {
         number={newNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} f={setPersons} />
+      <Persons persons={persons} filter={filter} f={setPersons} changeMessage={changeMessage} />
     </div>
   )
 }
