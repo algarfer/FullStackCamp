@@ -1,7 +1,11 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
+
+morgan.token("body", (req, _) => JSON.stringify(req.body))
 
 app.use(express.json())
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"))
 
 let phonebook = [
   {
@@ -25,6 +29,16 @@ let phonebook = [
     "number": "39-23-6423122"
   }
 ]
+
+const requestLogger = (req, res, next) => {
+  console.log("Method:", req.method)
+  console.log("Path:", req.path)
+  console.log("Body:", req.body)
+  console.log("---")
+  next()
+}
+
+app.use(requestLogger)
 
 app.get('/api/persons', (req, res) => {
   res.json(phonebook)
@@ -58,6 +72,12 @@ app.get("/info", (req, res) => {
   msg += `<p>${new Date()}</p>`
   res.send(msg)
 })
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).json({ error: "unknown endpoint" })
+}
+
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
