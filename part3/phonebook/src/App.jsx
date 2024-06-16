@@ -42,10 +42,11 @@ const App = () => {
               .update(p[0].id, {...p[0], number: newNumber})
               .then(returnedPerson => {
                 setPersons(persons.map(person => person.id !== p[0].id ? person : returnedPerson))
+                const name = newName
                 setNewName('')
                 setNewNumber('')
                 setFilter('')
-                changeMessage(`Updated ${returnedPerson.name}`, true)
+                changeMessage(`Updated ${name}`, true)
               })
           }
         } else {
@@ -53,10 +54,11 @@ const App = () => {
             .create({ name: newName, number: newNumber, id: persons.length + 1 })
             .then(returnedPerson => {
               setPersons(persons.concat(returnedPerson))
+              const name = newName
               setNewName('')
               setNewNumber('')
               setFilter('')
-              changeMessage(`Added ${returnedPerson.name}`, true)
+              changeMessage(`Added ${name}`, true)
             })
         }
       })
