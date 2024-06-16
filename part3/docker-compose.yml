@@ -1,0 +1,88 @@
+services:
+  notes:
+    container_name: notes-fsopen
+    profiles: ["notes"]
+    build:
+      context: ./notes
+    depends_on:
+      - notesb
+    networks:
+      - mynetwork
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+    restart: always
+
+  notesb:
+    container_name: notesb-fsopen
+    profiles: ["notes"]
+    build:
+      context: ./notes-backend
+    networks:
+      - mynetwork
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+    restart: always
+
+  phonebook:
+    container_name: phonebook-fsopen
+    profiles: ["phonebook"]
+    build:
+      context: ./phonebook
+    depends_on:
+      - phonebookb
+    networks:
+      - mynetwork
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+    restart: always
+
+  phonebookb:
+    container_name: phonebookb-fsopen
+    profiles: ["phonebook"]
+    build:
+      context: ./phonebook-backend
+    networks:
+      - mynetwork
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+    restart: always
+
+  notesn:
+    container_name: notesn-fsopen
+    profiles: ["notes"]
+    image: nginx:latest
+    depends_on:
+      - notes
+      - notesb
+    networks:
+      - mynetwork
+    ports:
+      - "80:80"
+    volumes:
+      - ./notes-nginx.conf:/etc/nginx/conf.d/default.conf
+
+  phonebookn:
+    container_name: phonebookn-fsopen
+    profiles: ["phonebook"]
+    image: nginx:latest
+    depends_on:
+      - phonebook
+      - phonebookb
+    networks:
+      - mynetwork
+    ports:
+      - "80:80"
+    volumes:
+      - ./phonebook-nginx.conf:/etc/nginx/conf.d/default.conf
+
+networks:
+  mynetwork:
+    driver: bridge
