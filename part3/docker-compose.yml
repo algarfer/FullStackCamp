@@ -19,6 +19,8 @@ services:
     profiles: ["notes"]
     build:
       context: ./notes-backend
+    depends_on:
+      - mongo
     networks:
       - mynetwork
     ports:
@@ -47,6 +49,8 @@ services:
     profiles: ["phonebook"]
     build:
       context: ./phonebook-backend
+    depends_on:
+      - mongo
     networks:
       - mynetwork
     ports:
@@ -83,6 +87,24 @@ services:
     volumes:
       - ./phonebook-nginx.conf:/etc/nginx/conf.d/default.conf
 
+  mongo:
+    container_name: mongo-fsopen
+    image: mongo:latest
+    profiles: ["notes", "phonebook"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${mongou:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${mongop:-changeme}
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "8000:27017"
+    networks:
+      - mynetwork
+    restart: always
+
 networks:
   mynetwork:
     driver: bridge
+
+volumes:
+  mongo_data:
