@@ -7,7 +7,7 @@ if(process.argv.length < 3) {
 
 const password = process.argv[2]
 
-const url = `mongodb://fullstack:${password}@158.179.219.235:8000/noteApp`
+const url = `mongodb://fullstack:${password}@158.179.219.235:8000/noteApp?authSource=admin`
 
 mongoose.set('strictQuery',false)
 

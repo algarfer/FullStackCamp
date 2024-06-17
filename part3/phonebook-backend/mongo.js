@@ -1,12 +1,11 @@
 const mongoose = require('mongoose')
-const {mongo} = require("mongoose");
 
 if(process.argv.length < 3) {
   console.log("give password as argument")
   process.exit(1)
 }
 
-const url = `mongodb://fullstack:${process.argv[2]}@158.179.219.235:8000/phonebook`
+const url = `mongodb://fullstack:${process.argv[2]}@158.179.219.235:8000/phonebook?authSource=admin`
 
 const phonebookSchema = new mongoose.Schema({
   name: String,
