@@ -27,7 +27,7 @@ services:
       - "3001:3001"
     environment:
       PORT: 3001
-      MONGO_URI: mongodb://${fullstack:-root}:${mongop:-changeme}@${vmip:-localhost}:8000/noteApp
+      MONGODB_URI: mongodb://${mongou:-root}:${mongop:-changeme}@${vmip:-localhost}:8000/noteApp?authSource=admin
     restart: always
 
   phonebook:
@@ -58,7 +58,7 @@ services:
       - "3001:3001"
     environment:
       PORT: 3001
-      MONGO_URI: mongodb://${fullstack:-root}:${mongop:-changeme}@${vmip:-localhost}:8000/phonebook
+      MONGODB_URI: mongodb://${mongou:-root}:${mongop:-changeme}@${vmip:-localhost}:8000/phonebook?authSource=admin
     restart: always
 
   notesn:
