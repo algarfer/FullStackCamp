@@ -27,6 +27,7 @@ services:
       - "3001:3001"
     environment:
       PORT: 3001
+      MONGO_URI: mongodb://${fullstack:-root}:${mongop:-changeme}@${vmip:-localhost}:8000/noteApp
     restart: always
 
   phonebook:
@@ -57,6 +58,7 @@ services:
       - "3001:3001"
     environment:
       PORT: 3001
+      MONGO_URI: mongodb://${fullstack:-root}:${mongop:-changeme}@${vmip:-localhost}:8000/phonebook
     restart: always
 
   notesn:
@@ -90,7 +92,6 @@ services:
   mongo:
     container_name: mongo-fsopen
     image: mongo:latest
-    profiles: ["notes", "phonebook"]
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${mongou:-root}
       MONGO_INITDB_ROOT_PASSWORD: ${mongop:-changeme}
