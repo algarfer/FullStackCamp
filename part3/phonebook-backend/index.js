@@ -19,8 +19,9 @@ const requestLogger = (req, res, next) => {
 app.use(requestLogger)
 
 app.get('/api/persons', (req, res, next) => {
+  const { name } = req.query
   Person
-    .find({})
+    .find(`${name}` !== "undefined" ? { name } : {})
     .then(persons => res.json(persons))
     .catch(err => next(err))
 })
