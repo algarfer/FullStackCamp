@@ -18,27 +18,40 @@ const requestLogger = (req, res, next) => {
 
 app.use(requestLogger)
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (req, res, next) => {
   Person
     .find({})
     .then(persons => res.json(persons))
+    .catch(err => next(err))
 })
 
-app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
+app.get('/api/persons/:id', (req, res, next) => {
+  const id = req.params.id
   Person
     .find({ id })
     .then(persons => {
-    if(persons.length === 0) return res.status(404).send("Person not found")
-    res.json(persons)
-  })
+      if(persons.length === 0) return res.status(404).send("Person not found")
+      res.json(persons)
+    })
+    .catch(err => next(err))
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.put('/api/persons/:id', (req, res, next) => {
+  const id = req.params.id
+  const { name, number } = req.body
+  if(!name || !number) return res.status(400).json({ error: "name or number missing" })
+
+  Person
+    .findByIdAndUpdate(id, { name, number }, { new: true })
+    .then(updatedPerson => res.json(updatedPerson))
+    .catch(err => next(err))
+})
+
+app.delete('/api/persons/:id', (req, res, next) => {
   Person
     .findByIdAndDelete(req.params.id)
     .then(() => res.status(204).end())
-    .catch(() => res.status(204).end())
+    .catch(err => next(err))
 })
 
 app.post('/api/persons', async (req, res) => {
@@ -62,6 +75,15 @@ app.get("/info", (req, res) => {
   msg += `<p>${new Date()}</p>`
   res.send(msg)
 })
+
+const errorHandler = (err, req, res, next) => {
+  console.error(err.message)
+
+  if(err.name === 'CastError') return res.status(400).send({ error: 'malformatted id' })
+  next(err)
+}
+
+app.use(errorHandler)
 
 const unknownEndpoint = (req, res) => {
   res.status(404).json({ error: "unknown endpoint" })
