@@ -15,9 +15,8 @@ app.get('/api/notes', (req, res) => {
   Note.find({}).then(notes => res.json(notes))
 })
 
-app.post('/api/notes', (req, res) => {
+app.post('/api/notes', (req, res, next) => {
   const { body } = req
-  if(!body.content) return res.status(400).json({ error: "content missing" })
 
   const note = new Note({
     content: body.content,
@@ -26,6 +25,7 @@ app.post('/api/notes', (req, res) => {
 
   note.save()
     .then(savedNote => res.json(savedNote))
+    .catch(err => next(err))
 })
 
 app.get('/api/notes/:id', (req, res, next) => {
@@ -50,10 +50,8 @@ app.put('/api/notes/:id', (req, res) => {
   const id = req.params.id
   const { content, important } = req.body
 
-  const note = { content, important }
-
   Note
-    .findByIdAndUpdate(id, note, { new: true })
+    .findByIdAndUpdate(id, { content, important }, { new: true, runValidators: true, context: "query" })
     .then(updatedNote => res.json(updatedNote))
     .catch(err => next(err))
 })
@@ -62,6 +60,7 @@ const errorHandler = (err, req, res, next) => {
   console.error(err.message)
 
   if(err.name === 'CastError') return res.status(400).send({ error: 'malformatted id' })
+  if(err.name === 'ValidationError') return res.status(400).json({ error: err.message })
   next(err)
 }
 

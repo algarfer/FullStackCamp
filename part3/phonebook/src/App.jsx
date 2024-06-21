@@ -48,6 +48,7 @@ const App = () => {
                 setFilter('')
                 changeMessage(`Updated ${name}`, true)
               })
+              .catch(err => changeMessage(err.response.data.error, false))
           }
         } else {
           contacts
@@ -60,6 +61,7 @@ const App = () => {
               setFilter('')
               changeMessage(`Added ${name}`, true)
             })
+            .catch(err => changeMessage(err.response.data.error, false))
         }
       })
   }
